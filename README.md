@@ -1,6 +1,9 @@
 # TrashTrackers Hub
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/9e52738d-3cb9-464e-a65e-4639d84a24f5/deploy-status)](https://app.netlify.com/sites/trashtrackers/deploys)
+[![Deployment](https://img.shields.io/badge/Deployment-Vercel-2d3436?style=flat-square&logo=vercel)](https://trashtrackers.vercel.app/)
+[![GitHub issues](https://img.shields.io/github/issues/buitim/trashtracker-hub?style=flat-square)](https://github.com/buitim/trashtracker-hub/issues)
+[![GitHub stars](https://img.shields.io/github/stars/buitim/trashtracker-hub?style=flat-square)](https://github.com/buitim/trashtracker-hub/stargazers)
+[![GitHub license](https://img.shields.io/github/license/buitim/trashtracker-hub?style=flat-square)](https://github.com/buitim/trashtracker-hub/blob/master/LICENSE)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
