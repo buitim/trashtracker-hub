@@ -12,6 +12,7 @@ const { Header, Content, Footer } = Layout;
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 const authUri = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&response_type=token&scope=identify`;
+console.log(authUri);
 
 export class MainContainer extends React.Component {
     constructor(props) {
