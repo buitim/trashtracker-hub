@@ -1,3 +1,7 @@
+# TrashTrackers Hub
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9e52738d-3cb9-464e-a65e-4639d84a24f5/deploy-status)](https://app.netlify.com/sites/trashtrackers/deploys)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
