@@ -34,13 +34,13 @@ export class MainContainer extends React.Component {
 
     handleDiscordToken = async () => {
         let token = '';
-        if (localStorage.getItem('token'))
+        if (localStorage.getItem('trashHubToken'))
         {
-            token = localStorage.getItem('token');
+            token = localStorage.getItem('trashHubToken');
         }
         else if (queryString.parse(this.props.location.hash).access_token){
             token = queryString.parse(this.props.location.hash).access_token;
-            localStorage.setItem('token', token);
+            localStorage.setItem('trashHubToken', token);
         }
         else {
             return;
