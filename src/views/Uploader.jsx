@@ -1,8 +1,14 @@
 import React from 'react';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import { Result, Button } from 'antd';
+import { UserOutlined } from '@ant-design/icons'
 
 const { Dragger } = Upload;
+
+const clientId = process.env.REACT_APP_CLIENT_ID;
+const redirectUri = process.env.REACT_APP_REDIRECT_URI;
+const authUri = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&response_type=token&scope=identify`;
 
 const uploadProps = {
     accept: 'image/*',
@@ -57,7 +63,11 @@ export class UploadView extends React.Component {
                         Upload your submission image here. Files are immediately uploaded.
                     </p>
                 </Dragger>
-            :   <p>Please login</p>
+            :   <Result 
+                    status='500'
+                    title='Please log in to upload'
+                    extra={<Button type='primary' icon={<UserOutlined />} href={authUri}>Login</Button>}
+                />
 
         );
     }
