@@ -77,7 +77,7 @@ export class MainContainer extends React.Component {
                 <Layout className='layout-container'>
                     <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
                         <Link to='/home'>
-                            <div className="logo" />
+                            <div className="logo"/>
                         </Link>
                         <div className='login'>
                             <Tooltip title={this.state.userData.userName ? 'Logged in!' : 'Click to log in with Discord'}>
