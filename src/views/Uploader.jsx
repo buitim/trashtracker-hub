@@ -1,21 +1,16 @@
 import React from 'react';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import axios from 'axios';
 
 const { Dragger } = Upload;
 
 const uploadProps = {
-    // name: 'henlo',
     accept: 'image/*',
     action: 'https://api.cloudinary.com/v1_1/buitim/image/upload',
     data: { upload_preset: 'ewtam4l1' },
+    showUploadList: false,
     onChange(info) {
         const { status } = info.file;
-        if (status !== 'uploading') {
-            console.log('[+] Upload finished');
-            // console.log(info.file, info.fileList);
-        }
         if (status === 'done') {
             message.success(`${info.file.name} uploaded successfully.`);
         } else if (status === 'error') {
@@ -38,34 +33,32 @@ export class UploadView extends React.Component {
         this.setState({ isLoading: false });
     }
 
-    uploader = async (file) => {
-        console.log(file);
-        try {
-            const res = await axios({
-                method: 'POST',
-                url: 'https://api.cloudinary.com/v1_1/buitim/image/upload',
-                data: {
-                    file: file,
-                    upload_preset: 'ewtam4l1'
-                }
-            });
-        }
-        catch (err) {
-            console.log(err);
-        }
+    createId = () => {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    transformFile = (file) => {
+        const username = this.props.userData.userName.split('#')[0];
+        const extension = file.name.split('.')[1];
+        const id = this.createId();
+        let newFile = new File([file], `${username}-${id}.${extension}`);
+        return newFile;
     }
 
     render() {
         return (
-            <Dragger {...uploadProps}>
-                <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                <p className="ant-upload-hint">
-                    Upload your submission image here
-                </p>
-            </Dragger>
+            this.props.userData.isLoggedIn 
+            ?   <Dragger {...uploadProps} transformFile={this.transformFile}>
+                    <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    <p className="ant-upload-hint">
+                        Upload your submission image here. Files are immediately uploaded.
+                    </p>
+                </Dragger>
+            :   <p>Please login</p>
+
         );
     }
 }
