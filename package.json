@@ -16,8 +16,8 @@
     "react-scripts": "3.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "SET REACT_APP_SHA=TestHash & react-scripts start",
+    "build": "REACT_APP_SHA=$VERCEL_GITHUB_COMMIT_SHA react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

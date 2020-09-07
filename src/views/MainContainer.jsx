@@ -12,14 +12,14 @@ const { Header, Content, Footer } = Layout;
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 const authUri = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&response_type=token&scope=identify`;
-console.log(authUri);
+const sha = process.env.REACT_APP_SHA.substring(0, 7);
 
 export class MainContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedKey: ['1'],
-            userData: {}
+            userData: { isLoggedIn: false }
         };
     }
 
@@ -36,27 +36,34 @@ export class MainContainer extends React.Component {
         let token = '';
         if (localStorage.getItem('trashHubToken'))
         {
+            /* If the token exists in local storage */
             token = localStorage.getItem('trashHubToken');
         }
         else if (queryString.parse(this.props.location.hash).access_token){
+            /* If the url contains a jwt */
             token = queryString.parse(this.props.location.hash).access_token;
             localStorage.setItem('trashHubToken', token);
         }
         else {
+            /* User does not have a jwt or token. Abort */
             return;
         }
 
         try {
+            /* Use the token to get user data */
             const res = await axios({
                 url: 'https://discord.com/api/users/@me',
                 headers: {
                     authorization: `Bearer ${token}`
                 }
             })
+
+            /* Add data to state */
             this.setState({ 
                 userData: {
                     userName: `${res.data.username}#${res.data.discriminator}`,
-                    userAvatar: `https://cdn.discordapp.com/avatars/${res.data.id}/${res.data.avatar}.png`
+                    userAvatar: `https://cdn.discordapp.com/avatars/${res.data.id}/${res.data.avatar}.png`,
+                    isLoggedIn: true
                 }
             });
         } catch (error) {
@@ -70,7 +77,7 @@ export class MainContainer extends React.Component {
                 <Layout className='layout-container'>
                     <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
                         <Link to='/home'>
-                            <div className="logo" />
+                            <div className="logo"/>
                         </Link>
                         <div className='login'>
                             <Tooltip title={this.state.userData.userName ? 'Logged in!' : 'Click to log in with Discord'}>
@@ -85,7 +92,7 @@ export class MainContainer extends React.Component {
                         </div>
                         <Menu theme="dark" mode="horizontal" selectedKeys={this.state.selectedKey}>
                             <Menu.Item key="1">
-                                <Link to='/home'>Home</Link>
+                                <Link to='/'>Home</Link>
                             </Menu.Item>
                             <Menu.Item key="2">
                                 <Link to='/upload'>Competition Uploader</Link>
@@ -97,7 +104,7 @@ export class MainContainer extends React.Component {
                             <AppRouter onRouteChange={this.onRouteChange} userData={this.state.userData}/>
                         </div>
                     </Content>
-                    <Footer className='layout-footer'>Tim Bui ©2020 | Created with ❤ for TrashTrackers Discord Server</Footer>
+                    <Footer className='layout-footer'>Tim Bui ©2020 | Created with ❤ for TrashTrackers Discord Server {sha ? `| ${sha}` : ''}</Footer>
                 </Layout>
             </div>
         );
