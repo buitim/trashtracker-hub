@@ -104,7 +104,7 @@ export class MainContainer extends React.Component {
                             <AppRouter onRouteChange={this.onRouteChange} userData={this.state.userData}/>
                         </div>
                     </Content>
-                    <Footer className='layout-footer'>Tim Bui ©2020 | Created with ❤ for TrashTrackers Discord Server | {sha}</Footer>
+                    <Footer className='layout-footer'>Tim Bui ©2020 | Created with ❤ for TrashTrackers Discord Server {sha ? `| ${sha}` : ''}</Footer>
                 </Layout>
             </div>
         );
