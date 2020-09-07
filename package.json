@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "SET REACT_APP_SHA=22e7d7b262687043dc51f743787cc9d2a2da0496 & react-scripts start",
-    "build": "REACT_APP_SHA=$VERCEL_GITHUB_COMMIT_SHA react-scripts build",
+    "build": "REACT_APP_SHA=$VERCEL_GITHUB_COMMIT_SHA && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
