@@ -1,6 +1,6 @@
 # TrashTrackers Hub
 
-[![Deployment](https://img.shields.io/badge/Deployment-Vercel-2d3436?style=flat-square&logo=vercel)](https://trashtrackers.vercel.app/)
+[![Deployment](https://img.shields.io/badge/Deployed%20with-Vercel-2d3436?style=flat-square&logo=vercel)](https://trashtrackers.vercel.app/)
 [![GitHub issues](https://img.shields.io/github/issues/buitim/trashtracker-hub?style=flat-square)](https://github.com/buitim/trashtracker-hub/issues)
 [![GitHub stars](https://img.shields.io/github/stars/buitim/trashtracker-hub?style=flat-square)](https://github.com/buitim/trashtracker-hub/stargazers)
 [![GitHub license](https://img.shields.io/github/license/buitim/trashtracker-hub?style=flat-square)](https://github.com/buitim/trashtracker-hub/blob/master/LICENSE)
