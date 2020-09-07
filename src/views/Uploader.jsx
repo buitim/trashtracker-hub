@@ -1,17 +1,20 @@
 import React from 'react';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Dragger } = Upload;
 
 const uploadProps = {
-    name: 'henlo',
+    // name: 'henlo',
     accept: 'image/*',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    action: 'https://api.cloudinary.com/v1_1/buitim/image/upload',
+    data: { upload_preset: 'ewtam4l1' },
     onChange(info) {
         const { status } = info.file;
         if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
+            console.log('[+] Upload finished');
+            // console.log(info.file, info.fileList);
         }
         if (status === 'done') {
             message.success(`${info.file.name} uploaded successfully.`);
@@ -20,6 +23,7 @@ const uploadProps = {
         }
     },
 };
+
 
 export class UploadView extends React.Component {
     constructor(props) {
@@ -30,8 +34,25 @@ export class UploadView extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: false });
         this.props.onRouteChange('2');
+        this.setState({ isLoading: false });
+    }
+
+    uploader = async (file) => {
+        console.log(file);
+        try {
+            const res = await axios({
+                method: 'POST',
+                url: 'https://api.cloudinary.com/v1_1/buitim/image/upload',
+                data: {
+                    file: file,
+                    upload_preset: 'ewtam4l1'
+                }
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     render() {
