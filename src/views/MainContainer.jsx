@@ -12,6 +12,7 @@ const { Header, Content, Footer } = Layout;
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 const authUri = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&response_type=token&scope=identify`;
+const sha = process.env.REACT_APP_SHA.substring(0, 7);
 
 export class MainContainer extends React.Component {
     constructor(props) {
@@ -103,7 +104,7 @@ export class MainContainer extends React.Component {
                             <AppRouter onRouteChange={this.onRouteChange} userData={this.state.userData}/>
                         </div>
                     </Content>
-                    <Footer className='layout-footer'>Tim Bui ©2020 | Created with ❤ for TrashTrackers Discord Server | {process.env.REACT_APP_SHA}</Footer>
+                    <Footer className='layout-footer'>Tim Bui ©2020 | Created with ❤ for TrashTrackers Discord Server | {sha}</Footer>
                 </Layout>
             </div>
         );
