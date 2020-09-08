@@ -29,12 +29,12 @@ export class UploadView extends React.Component {
     componentDidMount() {
         this.props.onRouteChange('2');
         this.getUserUploadData();
+        this.setState({ isLoading: false });
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.userData !== prevProps.userData) {
             this.getUserUploadData();
-            this.setState({ isLoading: false });
         }
     }
 
