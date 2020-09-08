@@ -63,6 +63,7 @@ export class MainContainer extends React.Component {
                 userData: {
                     userName: `${res.data.username}#${res.data.discriminator}`,
                     userAvatar: `https://cdn.discordapp.com/avatars/${res.data.id}/${res.data.avatar}.png`,
+                    userId: res.data.id,
                     isLoggedIn: true
                 }
             });
