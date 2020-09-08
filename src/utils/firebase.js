@@ -1,6 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/firestore";
+import "firebase/storage";
 
 const firebaseConfig = {
         apiKey: "***REMOVED***",
@@ -17,6 +18,8 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 const db = firebaseApp.firestore();
 
-export { db };
+const fbStorage = firebaseApp.storage().ref();
+
+export { db, fbStorage };
 
 
