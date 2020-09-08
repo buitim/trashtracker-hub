@@ -10,6 +10,7 @@ import { UserOutlined } from '@ant-design/icons'
 const { Header, Content, Footer } = Layout;
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
+const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 const authUri = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&response_type=token&scope=identify`;
 const sha = process.env.REACT_APP_SHA.substring(0, 7);
@@ -28,26 +29,28 @@ export class MainContainer extends React.Component {
     }
 
     onRouteChange = (val) => {
-        // console.log(val);
         this.setState({ selectedKey: [val]});
     }
 
     handleDiscordToken = async () => {
         let token = '';
-        if (localStorage.getItem('trashHubToken'))
-        {
-            /* If the token exists in local storage */
-            token = localStorage.getItem('trashHubToken');
-        }
-        else if (queryString.parse(this.props.location.hash).access_token){
+        if (queryString.parse(this.props.location.hash).access_token){
             /* If the url contains a jwt */
             token = queryString.parse(this.props.location.hash).access_token;
             localStorage.setItem('trashHubToken', token);
+        }
+        else if (localStorage.getItem('trashHubToken'))
+        {
+            /* If the token exists in local storage */
+            token = localStorage.getItem('trashHubToken');
         }
         else {
             /* User does not have a jwt or token. Abort */
             return;
         }
+
+        /* Debug */
+        // console.log(`[+] Discord Token: ${token}`);
 
         try {
             /* Use the token to get user data */
@@ -72,7 +75,49 @@ export class MainContainer extends React.Component {
         }
     }
 
+    revokeToken = async () => {
+        const token = localStorage.getItem('trashHubToken');
+
+        let bodyFormData = new FormData();
+        bodyFormData.append('client_id', clientId);
+        bodyFormData.append('client_secret', clientSecret);
+        bodyFormData.append('token', token);
+
+        try {
+            await axios({
+                url: 'https://discord.com/api/oauth2/token/revoke',
+                method: 'POST',
+                data: bodyFormData
+            });
+
+            this.setState({
+                userData: {
+                    isLoggedIn: false
+                }
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
     render() {
+        let loginButtonProps = {
+            type: 'primary',
+            icon: <UserOutlined />
+        };
+        if (this.state.userData.isLoggedIn) {
+            loginButtonProps = {
+                ...loginButtonProps,
+                onClick: this.revokeToken
+            };
+        }
+        else {
+            loginButtonProps = {
+                ...loginButtonProps,
+                href: authUri
+            };
+        }
         return (
             <div>
                 <Layout className='layout-container'>
@@ -81,12 +126,8 @@ export class MainContainer extends React.Component {
                             <div className="logo"/>
                         </Link>
                         <div className='login'>
-                            <Tooltip title={this.state.userData.userName ? 'Logged in!' : 'Click to log in with Discord'}>
-                                <Button 
-                                    type='primary' 
-                                    icon={<UserOutlined />}
-                                    disabled={this.state.userData.userName}
-                                    href={authUri}>
+                            <Tooltip title={this.state.userData.isLoggedIn ? 'Click to log out' : 'Click to log in with Discord'}>
+                                <Button {...loginButtonProps}>
                                         {this.state.userData.userName || 'Login'}
                                 </Button>
                             </Tooltip>
