@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/App.css';
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
 import { Layout, Menu, Button, Tooltip } from 'antd';
 import AppRouter from '../utils/router';
 import queryString from 'query-string';
@@ -8,6 +8,7 @@ import axios from 'axios';
 import { UserOutlined } from '@ant-design/icons'
 
 const { Header, Content, Footer } = Layout;
+const history = useHistory();
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
@@ -95,6 +96,8 @@ export class MainContainer extends React.Component {
                     isLoggedIn: false
                 }
             });
+
+            history.push('/');
         }
         catch (err) {
             console.log(err);
