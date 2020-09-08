@@ -122,6 +122,7 @@ export class UploadView extends React.Component {
         if (!this.state.isLoading) {
             if(this.state.isUserDataLoaded) {
                 let titleText = '', subText = '';
+
                 if (this.state.uploadCount === 1)
                     titleText = `You have ${this.state.uploadCount} upload remaining`;
                 else if (this.state.uploadCount > 0)
@@ -163,6 +164,7 @@ export class UploadView extends React.Component {
                 }
             }
         }
+        
         return <Skeleton />; 
     }
 
