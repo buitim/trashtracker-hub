@@ -15,15 +15,7 @@ const uploadProps = {
     accept: 'image/*',
     action: 'https://api.cloudinary.com/v1_1/buitim/image/upload',
     data: { upload_preset: 'ewtam4l1' },
-    showUploadList: false,
-    onChange(info) {
-        const { status } = info.file;
-        if (status === 'done') {
-            message.success(`${info.file.name} uploaded successfully.`);
-        } else if (status === 'error') {
-            message.error(`${info.file.name} upload failed.`);
-        }
-    },
+    showUploadList: false
 };
 
 
@@ -85,6 +77,28 @@ export class UploadView extends React.Component {
         }
     }
 
+    putData = async (data) => {
+        const collection = db.collection('upload').doc(this.props.userData.userName);
+        await collection.set(data);
+    }
+
+    onUploadChange = (info) => {
+        const { status } = info.file;
+        if (status === 'done') {
+            message.success(`${info.file.name} uploaded successfully.`);
+            const data = { uploadCount: this.state.uploadCount - 1 };
+            this.putData(data);
+            this.setState({ uploadCount: data.uploadCount });
+
+            if (data.uploadCount === 0) {
+                message.error('You have hit your upload limit.');
+                this.setState({ isUploaderDisabled: true, uploadCount: 0 });
+            }
+        } else if (status === 'error') {
+            message.error(`${info.file.name} upload failed.`);
+        }
+    }
+
     createId = () => {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
@@ -100,14 +114,17 @@ export class UploadView extends React.Component {
     render() {
         return (
             this.props.userData.isLoggedIn
-                ? <Dragger {...uploadProps} transformFile={this.transformFile} disabled={this.state.isUploaderDisabled}>
-                    <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    <p className="ant-upload-hint">
-                        Upload your submission image here. Files are immediately uploaded.
-                    </p>
+                ? <Dragger {...uploadProps} 
+                    transformFile={this.transformFile} 
+                    disabled={this.state.isUploaderDisabled}
+                    onChange={this.onUploadChange}>
+                        <p className="ant-upload-drag-icon">
+                            <InboxOutlined />
+                        </p>
+                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                        <p className="ant-upload-hint">
+                            Upload your submission image here. Files are immediately uploaded.
+                        </p>
                 </Dragger>
                 : <Result
                     status='500'
