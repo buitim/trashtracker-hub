@@ -119,7 +119,6 @@ export class UploadView extends React.Component {
     }
 
     Content = () => {
-        console.log(this.props.userData);
         if (!this.state.isLoading) {
             if(this.state.isUserDataLoaded) {
                 let titleText = '', subText = '';
