@@ -1,4 +1,5 @@
 import React from 'react';
+import { db } from '../utils/firebase.js';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
@@ -30,13 +31,58 @@ export class UploadView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isUploaderDisabled: false,
+            uploadCount: -1,
             isLoading: true
         };
     }
 
     componentDidMount() {
         this.props.onRouteChange('2');
+        this.getUserUploadData();
         this.setState({ isLoading: false });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.userData !== prevProps.userData) {
+            this.getUserUploadData();
+        }
+    }
+
+    getUserUploadData = async () => {
+        try {
+            if (this.props.userData.userName) {
+                const collection = db.collection('upload').doc(this.props.userData.userName);
+                const doc = await collection.get();
+                // If the user has data
+                if(doc.exists){
+                    // Check if number of uploads exists
+                    const uploadCount = doc.data().uploadCount;
+                    
+                    // If 0, block uploads
+                    if (uploadCount === 0) {
+                        message.error('You have hit your upload limit.');
+                        this.setState({ isUploaderDisabled: true, uploadCount: 0 });
+                    }
+                    else if (uploadCount > 0) {
+                        this.setState({ uploadCount: uploadCount });
+                    }
+                    else {
+                        const data = { uploadCount: 5 }
+                        await collection.set(data); 
+                        this.setState({ uploadCount: 5 });
+                    }   
+                }
+                // If the user does not have data, init to 5 uploads
+                else {
+                    const data = { uploadCount: 5 }
+                    await collection.set(data);
+                    this.setState({ uploadCount: 5 });
+                }   
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     createId = () => {
@@ -53,8 +99,8 @@ export class UploadView extends React.Component {
 
     render() {
         return (
-            this.props.userData.isLoggedIn 
-            ?   <Dragger {...uploadProps} transformFile={this.transformFile}>
+            this.props.userData.isLoggedIn
+                ? <Dragger {...uploadProps} transformFile={this.transformFile} disabled={this.state.isUploaderDisabled}>
                     <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                     </p>
@@ -63,7 +109,7 @@ export class UploadView extends React.Component {
                         Upload your submission image here. Files are immediately uploaded.
                     </p>
                 </Dragger>
-            :   <Result 
+                : <Result
                     status='500'
                     title='Please log in to upload'
                     extra={<Button type='primary' icon={<UserOutlined />} href={authUri}>Login</Button>}
