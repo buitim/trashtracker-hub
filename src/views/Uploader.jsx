@@ -107,7 +107,7 @@ export class UploadView extends React.Component {
         const username = this.props.userData.userName.split('#')[0];
         const extension = file.name.split('.')[1];
         const id = this.createId();
-        const fileRef = fbStorage.child(`ServerIcon/${username}-${id}.${extension}`);
+        const fileRef = fbStorage.child(`ServerIcon/${this.props.userData.userName}/${username}-${id}.${extension}`);
 
         try {
             const res = await fileRef.put(file);
