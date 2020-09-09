@@ -24,6 +24,7 @@ export class UploadView extends React.Component {
             isUploaderDisabled: false,
             uploadCount: -1,
             isUserDataLoaded: false,
+            isPastDeadline: false,
             deadline: {},
             isLoading: true
         };
@@ -50,8 +51,17 @@ export class UploadView extends React.Component {
         try {
             const collection = db.collection('deadline').doc('avatar_contest');
             const doc = await collection.get();
-            // console.log(doc.data().datetime.toMillis());
+            const currTime = DateTime.local();
+            const deadlineInMillis = doc.data().datetime.toMillis();
+            let additionalState = {};
+
+            // Check if deadline has passed
+            if (deadlineInMillis - currTime.ts < 0) {
+                additionalState = { isPastDeadline: true, isUploaderDisabled: true }
+            }
+
             this.setState({ 
+                ...additionalState,
                 deadline: DateTime.fromSeconds(doc.data().datetime.seconds)
             });
         }
@@ -158,10 +168,12 @@ export class UploadView extends React.Component {
                         <div style={{ marginBottom:'1.2rem' }}>
                             <Text strong>Deadline: </Text>
                             <Text>{this.state.deadline.toLocaleString(DateTime.DATETIME_FULL)}</Text>
+
                             <br />
-                            <Text type='secondary'>
-                                <Countdown date={this.state.deadline.toMillis()} /> until deadline
-                            </Text>
+
+                            {this.state.isPastDeadline
+                            ? <Text type='danger'>Deadline has passed</Text>
+                            : <Text type='secondary'> <Countdown date={this.state.deadline.toMillis()} /> until deadline </Text> }
                         </div>
 
                         <Dragger
