@@ -186,7 +186,10 @@ export class UploadView extends React.Component {
                                 </p>
                                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
                                 <p className="ant-upload-hint">
-                                    Upload your submission image here. Files are immediately uploaded.
+                                    {this.state.isUploaderDisabled
+                                    ? 'Uploader is disabled.'
+                                    : 'Upload your submission image here. Files are immediately uploaded.'}
+                                    
                                 </p>
                         </Dragger>
                     </>
