@@ -1,4 +1,6 @@
 import React from 'react';
+import Countdown from 'react-countdown';
+import { DateTime } from 'luxon';
 import { db, fbStorage } from '../utils/firebase.js';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
@@ -22,12 +24,14 @@ export class UploadView extends React.Component {
             isUploaderDisabled: false,
             uploadCount: -1,
             isUserDataLoaded: false,
+            deadline: {},
             isLoading: true
         };
     }
 
     componentDidMount() {
         this.props.onRouteChange('2');
+        this.getDeadline();
         this.getUserUploadData();
         this.setState({ isLoading: false });
     }
@@ -40,6 +44,20 @@ export class UploadView extends React.Component {
 
     createId = () => {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    getDeadline = async () => {
+        try {
+            const collection = db.collection('deadline').doc('avatar_contest');
+            const doc = await collection.get();
+            // console.log(doc.data().datetime.toMillis());
+            this.setState({ 
+                deadline: DateTime.fromSeconds(doc.data().datetime.seconds)
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     getUserUploadData = async () => {
@@ -134,8 +152,18 @@ export class UploadView extends React.Component {
 
                 return (
                     <>
-                        <Title level={3}>{titleText}</Title>
-                        <Title type='secondary' level={5} style={{ marginBottom:'2rem' }}>{subText}</Title>
+                        <Title level={4}>{titleText}</Title>
+                        <Title type='secondary' level={5}>{subText}</Title>
+
+                        <div style={{ marginBottom:'1.2rem' }}>
+                            <Text strong>Deadline: </Text>
+                            <Text>{this.state.deadline.toLocaleString(DateTime.DATETIME_FULL)}</Text>
+                            <br />
+                            <Text type='secondary'>
+                                <Countdown date={this.state.deadline.toMillis()} /> until deadline
+                            </Text>
+                        </div>
+
                         <Dragger
                             customRequest={(this.onUpload)}
                             disabled = {this.state.isUploaderDisabled}

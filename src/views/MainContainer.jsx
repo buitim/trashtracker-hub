@@ -71,7 +71,8 @@ export class MainContainer extends React.Component {
                 }
             });
         } catch (error) {
-            console.log(error);
+            // Invalid token
+            console.log(`[+] Invalid token => ${error}`);
         }
     }
 
