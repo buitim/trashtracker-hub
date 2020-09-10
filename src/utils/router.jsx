@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from "react-router-dom";
 import HomeView from '../views/Home';
 import UploadView from '../views/Uploader';
+import VoteView from '../views/Vote';
 
 export class AppRouter extends React.Component {
     render(){
@@ -9,6 +10,9 @@ export class AppRouter extends React.Component {
             <Switch>
                 <Route path='/upload'>
                     <UploadView onRouteChange={this.props.onRouteChange} userData={this.props.userData}/>
+                </Route>
+                <Route path='/vote'>
+                    <VoteView onRouteChange={this.props.onRouteChange} userData={this.props.userData}/>
                 </Route>
                 <Route path='/'>
                     <HomeView onRouteChange={this.props.onRouteChange}/>
