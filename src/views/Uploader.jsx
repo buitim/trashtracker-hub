@@ -5,17 +5,14 @@ import { db, fbStorage } from '../utils/firebase.js';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { Result, Button, Typography, Skeleton } from 'antd';
-import { UserOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons';
 
 const { Dragger } = Upload;
-const { Title, Text} = Typography;
+const { Title, Text } = Typography;
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 const authUri = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&response_type=token&scope=identify`;
-
-/* CHANGE THIS FOR NUMBER OF UPLOADS AVAILABLE */
-const uploadLimit = 5;
 
 export class UploadView extends React.Component {
     constructor(props) {
@@ -49,10 +46,11 @@ export class UploadView extends React.Component {
 
     getDeadline = async () => {
         try {
-            const collection = db.collection('deadline').doc('avatar_contest');
+            const collection = db.collection('config').doc('uploadCompetition');
             const doc = await collection.get();
             const currTime = DateTime.local();
-            const deadlineInMillis = doc.data().datetime.toMillis();
+            const deadlineInMillis = doc.data().deadline.toMillis();
+            const uploadLimit = doc.data().uploadLimit;
             let additionalState = {};
 
             // Check if deadline has passed
@@ -62,7 +60,8 @@ export class UploadView extends React.Component {
 
             this.setState({ 
                 ...additionalState,
-                deadline: DateTime.fromSeconds(doc.data().datetime.seconds)
+                deadline: DateTime.fromSeconds(doc.data().deadline.seconds),
+                uploadLimit: uploadLimit
             });
         }
         catch (err) {
@@ -90,16 +89,16 @@ export class UploadView extends React.Component {
                     }
                     /* Edge case where document exists but entry does not */
                     else {
-                        const data = { uploadCount: uploadLimit }
+                        const data = { uploadCount: this.state.uploadLimit };
                         await collection.set(data); 
-                        this.setState({ uploadCount: uploadLimit });
+                        this.setState({ uploadCount: this.state.uploadLimit });
                     }   
                 }
                 // If the user does not have data, init to 5 uploads
                 else {
-                    const data = { uploadCount: uploadLimit }
+                    const data = { uploadCount: this.state.uploadLimit };
                     await collection.set(data);
-                    this.setState({ uploadCount: uploadLimit });
+                    this.setState({ uploadCount: this.state.uploadLimit });
                 }   
 
                 this.setState({ isUserDataLoaded: true });
