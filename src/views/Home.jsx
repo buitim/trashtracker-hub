@@ -22,7 +22,15 @@ export class HomeView extends React.Component{
                 <Typography>
                     <Title>Welcome To TrashHub</Title>
                 </Typography>
-                <iframe title='Discord Widget' src="https://discordapp.com/widget?id=507367480268947456&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                <iframe 
+                    title='Discord Widget'
+                    src="https://discordapp.com/widget?id=507367480268947456&theme=dark"
+                    width="350" 
+                    height="500"
+                    allowtransparency="true" 
+                    frameBorder="0" 
+                    sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" >
+                </iframe>
             </>
         );
     }
