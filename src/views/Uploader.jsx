@@ -207,7 +207,7 @@ export class UploadView extends React.Component {
             }
         }
         
-        return <Skeleton />; 
+        return <Skeleton active />; 
     }
 
     render() {
