@@ -142,7 +142,7 @@ export class MainContainer extends React.Component {
                             <Menu.Item key="2">
                                 <Link to='/upload'>Competition Uploader</Link>
                             </Menu.Item>
-                            <Menu.Item key="3">
+                            <Menu.Item key="3" disabled>
                                 <Link to='/vote'>Voting</Link>
                             </Menu.Item>
                         </Menu>
