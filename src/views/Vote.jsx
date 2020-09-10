@@ -1,6 +1,6 @@
 import '../styles/VoteView.css';
 import React from 'react';
-import { db } from '../utils/firebase.js';
+import { db, fbStorage } from '../utils/firebase.js';
 import { Typography, Carousel, Image, Button, Skeleton } from 'antd';
 import { withRouter } from 'react-router-dom';
 
@@ -21,6 +21,7 @@ export class VoteView extends React.Component {
         this.state = {
             imageLeft: '',
             imageRight: '',
+            carouselUrls: [],
             isLoading: true
         };
     }
@@ -32,12 +33,32 @@ export class VoteView extends React.Component {
     }
 
     getImages = async () => {
-        const collection = db.collection('config').doc('uploadCompetition');
-        const doc = await collection.get();
-        this.setState({
-            imageLeft: doc.data().voteImage1,
-            imageRight: doc.data().voteImage2,
-        })
+        try {
+            /* Get voting images */
+            const collection = db.collection('config').doc('uploadCompetition');
+            const doc = await collection.get();
+
+            /* Set State for Images */
+            this.setState({
+                imageLeft: doc.data().voteImage1,
+                imageRight: doc.data().voteImage2,
+            });
+
+            /* Get carousel images */
+            const votingDirRef = fbStorage.child('voting/carousel');
+            const votingPictures = await votingDirRef.listAll();
+
+            /* Note: This is nastyyyyyyy */
+            const photoUrls =  await Promise.all(votingPictures.items.map(async (val) => {
+                const photoPath = val.location.path_;
+                return await fbStorage.child(photoPath).getDownloadURL();
+            }));
+
+            /* Set State for Carousel */
+            this.setState({ carouselUrls: photoUrls });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     Content = () => {
