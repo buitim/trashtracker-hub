@@ -142,6 +142,9 @@ export class MainContainer extends React.Component {
                             <Menu.Item key="2">
                                 <Link to='/upload'>Competition Uploader</Link>
                             </Menu.Item>
+                            <Menu.Item key="3">
+                                <Link to='/vote'>Vote</Link>
+                            </Menu.Item>
                         </Menu>
                     </Header>
                     <Content className="site-layout" style={{ padding: '2rem', marginTop: 64 }}>
