@@ -30,21 +30,17 @@ export class VoteView extends React.Component {
 
     getImages = async () => {
         try {
-            console.log('1');
             /* Get voting images */
             const collection = db.collection('config').doc('uploadCompetition');
             const doc = await collection.get();
-            console.log('2');
             /* Set State for Images */
             this.setState({
                 imageLeft: doc.data().voteImage1,
                 imageRight: doc.data().voteImage2,
             });
-            console.log('3');
             /* Get carousel images */
             const votingDirRef = fbStorage.child('voting/carousel');
             const votingPictures = await votingDirRef.listAll();
-            console.log('4');
             /* Note: This is nastyyyyyyy */
             const photoUrls =  await Promise.all(votingPictures.items.map(async (val) => {
                 const photoPath = val.location.path_;
@@ -59,7 +55,6 @@ export class VoteView extends React.Component {
     }
 
     CarouselImages = () => {
-        console.log('5');
         const images = this.state.carouselUrls.map((val, index) => {
             return (
                 <div key={index} style={{ textAlign: 'center', display: 'block' }}>
@@ -80,12 +75,10 @@ export class VoteView extends React.Component {
     }
 
     Content = () => {
-        console.log('6');
         if (this.state.isLoading) {
             return <Skeleton active paragraph={{ rows: 5 }}/>
         }
         else {
-            console.log(this.state);
             return (
                 <div className='vote-view-container'>
                     <Title className='vote-view-title' level={3}>Please make a vote selection below</Title>
