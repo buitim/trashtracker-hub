@@ -85,7 +85,7 @@ export class VoteView extends React.Component {
             return <Skeleton active paragraph={{ rows: 5 }}/>
         }
         else {
-            console.log('7');
+            console.log(this.state);
             return (
                 <div className='vote-view-container'>
                     <Title className='vote-view-title' level={3}>Please make a vote selection below</Title>
