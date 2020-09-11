@@ -10,11 +10,11 @@
     text-align: center;
 }
 
-.vote-view-carousel {
+.vote-view-gallery {
     grid-row: 7 / 8;
     grid-column: 1 / 3;
-    width: 350px;
-    height: 200px;
+    /* width: 100%; */
+    /* height: 5px; */
     /* place-self: center; */
     /* margin-top: -100px; */
     /* border-radius: 1.2rem; */
