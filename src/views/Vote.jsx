@@ -25,6 +25,7 @@ export class VoteView extends React.Component {
     async componentDidMount() {
         this.props.onRouteChange('3');
         await this.getImages();
+        await this.CarouselImages();
         this.setState({ isLoading: false });
     }
 
@@ -67,11 +68,13 @@ export class VoteView extends React.Component {
             );
         });
 
-        return (
-            <Carousel autoplay>
-                {images}
-            </Carousel>
-        );
+        console.log(images);
+
+        // return (
+        //     <Carousel autoplay>
+        //         {images}
+        //     </Carousel>
+        // );
     }
 
     Content = () => {
