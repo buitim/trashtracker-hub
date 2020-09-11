@@ -38,9 +38,14 @@ export class MainContainer extends React.Component {
     }
 
     getBracketUrl = async () => {
-        const collection = db.collection('config').doc('uploadCompetition');
-        const doc = await collection.get();
-        this.setState({ bracketUrl: doc.data().bracketUrl });
+        try {
+            const collection = db.collection('config').doc('uploadCompetition');
+            const doc = await collection.get();
+            this.setState({ bracketUrl: doc.data().bracketUrl });
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     handleDiscordToken = async () => {

@@ -40,7 +40,7 @@
 
 .vote-view-btn {
     grid-row: 4 / 5;
-    width: 150px;
+    /* width: 150px; */
     border-radius: 5px;
     place-self: center;
 }
