@@ -72,7 +72,7 @@ export class UploadView extends React.Component {
     getUserUploadData = async () => {
         try {
             if (this.props.userData.userName) {
-                const collection = db.collection('upload').doc(this.props.userData.userName);
+                const collection = db.collection('userData').doc(this.props.userData.userName);
                 const doc = await collection.get();
                 // If the user has data
                 if(doc.exists){
@@ -109,7 +109,7 @@ export class UploadView extends React.Component {
     }
 
     putData = async (data) => {
-        const collection = db.collection('upload').doc(this.props.userData.userName);
+        const collection = db.collection('userData').doc(this.props.userData.userName);
         await collection.set(data);
     }
 
