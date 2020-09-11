@@ -112,7 +112,8 @@ export class VoteView extends React.Component {
     render() {
         return (
             <>
-                <this.Content />
+                {/* <this.Content /> */}
+                <p>help</p>
             </>
         );
     }
