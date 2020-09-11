@@ -25,7 +25,6 @@ export class VoteView extends React.Component {
     async componentDidMount() {
         this.props.onRouteChange('3');
         await this.getImages();
-        await this.CarouselImages();
         this.setState({ isLoading: false });
     }
 
@@ -57,7 +56,6 @@ export class VoteView extends React.Component {
 
     CarouselImages = () => {
         const images = this.state.carouselUrls.map((val, index) => {
-            console.log(val);
             return (
                 <div key={index} style={{ textAlign: 'center', display: 'block' }}>
                     <Image 
@@ -69,13 +67,11 @@ export class VoteView extends React.Component {
             );
         });
 
-        console.log(images);
-
-        // return (
-        //     <Carousel autoplay>
-        //         {images}
-        //     </Carousel>
-        // );
+        return (
+            <Carousel autoplay>
+                {images}
+            </Carousel>
+        );
     }
 
     Content = () => {
@@ -105,9 +101,9 @@ export class VoteView extends React.Component {
 
                     <Title className='vote-view-title-carousel' level={3}>Submissions Gallery</Title>
 
-                    {/* <div className='vote-view-carousel'>
-                        <this.CarouselImages />
-                    </div> */}
+                    <div className='vote-view-carousel'>
+                        {this.state.carouselUrls.length > 0 ? <this.CarouselImages /> : <Skeleton /> }
+                    </div>
                 </div>
             );
         }
