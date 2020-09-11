@@ -57,6 +57,7 @@ export class VoteView extends React.Component {
 
     CarouselImages = () => {
         const images = this.state.carouselUrls.map((val, index) => {
+            console.log(val);
             return (
                 <div key={index} style={{ textAlign: 'center', display: 'block' }}>
                     <Image 
