@@ -2,10 +2,11 @@ import React from 'react';
 import '../styles/App.css';
 import { Link, withRouter } from "react-router-dom";
 import { Layout, Menu, Button, Tooltip } from 'antd';
+import { db } from '../utils/firebase';
 import AppRouter from '../utils/router';
 import queryString from 'query-string';
 import axios from 'axios';
-import { UserOutlined } from '@ant-design/icons'
+import { UserOutlined, LoginOutlined, LinkOutlined} from '@ant-design/icons'
 
 const { Header, Content, Footer } = Layout;
 
@@ -19,17 +20,27 @@ export class MainContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            bracketUrl: '',
             selectedKey: ['1'],
             userData: { isLoggedIn: false }
         };
     }
 
-    componentDidMount(){
-        this.handleDiscordToken();
+    async componentDidMount(){
+        await Promise.all([
+            this.handleDiscordToken(),
+            this.getBracketUrl()
+        ]);
     }
 
     onRouteChange = (val) => {
         this.setState({ selectedKey: [val]});
+    }
+
+    getBracketUrl = async () => {
+        const collection = db.collection('config').doc('uploadCompetition');
+        const doc = await collection.get();
+        this.setState({ bracketUrl: doc.data().bracketUrl });
     }
 
     handleDiscordToken = async () => {
@@ -105,19 +116,18 @@ export class MainContainer extends React.Component {
     }
 
     render() {
-        let loginButtonProps = {
-            type: 'primary',
-            icon: <UserOutlined />
-        };
+        let loginButtonProps = { type: 'primary' };
         if (this.state.userData.isLoggedIn) {
             loginButtonProps = {
                 ...loginButtonProps,
+                icon: <UserOutlined />,
                 onClick: this.revokeToken
             };
         }
         else {
             loginButtonProps = {
                 ...loginButtonProps,
+                icon: <LoginOutlined />,
                 href: authUri
             };
         }
@@ -144,6 +154,9 @@ export class MainContainer extends React.Component {
                             </Menu.Item>
                             <Menu.Item key="3" disabled>
                                 <Link to='/vote'>Voting</Link>
+                            </Menu.Item>
+                            <Menu.Item key="4" icon={<LinkOutlined />} disabled>
+                                <a href={this.state.bracketUrl || '#'} target='#'>Bracket</a>
                             </Menu.Item>
                         </Menu>
                     </Header>
