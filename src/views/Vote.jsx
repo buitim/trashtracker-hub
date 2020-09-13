@@ -45,10 +45,11 @@ export class VoteView extends React.Component {
             try {
                 const collection = db.collection('userData').doc(`${this.props.userData.userName}`);
                 const doc = await collection.get();
-                const data = doc.data();
-    
-                if (data.hasVoted)
+                if (doc) {
+                    const data = doc.data();
+                    if (data.hasVoted)
                     this.setState({ isButtonDisabled: true });
+                }
             } catch (error) {
                 console.log(error);
             }
