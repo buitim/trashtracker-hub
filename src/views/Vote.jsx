@@ -62,7 +62,7 @@ export class VoteView extends React.Component {
             const doc = await collection.get();
             const data = doc.data();
 
-            if (!data.hasVoted) {
+            if (!data || !data.hasVoted) {
                 collection.set({
                     ...data,
                     hasVoted: true
