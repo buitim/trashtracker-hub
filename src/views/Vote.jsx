@@ -45,6 +45,7 @@ export class VoteView extends React.Component {
             try {
                 const collection = db.collection('userData').doc(`${this.props.userData.userName}`);
                 const doc = await collection.get();
+                
                 if (doc) {
                     const data = doc.data();
                     if (data.hasVoted)
