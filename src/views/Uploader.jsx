@@ -74,6 +74,8 @@ export class UploadView extends React.Component {
             if (this.props.userData.userName) {
                 const collection = db.collection('userData').doc(this.props.userData.userName);
                 const doc = await collection.get();
+                let data = doc.data();
+
                 // If the user has data
                 if(doc.exists){
                     // Check if number of uploads exists
@@ -89,14 +91,14 @@ export class UploadView extends React.Component {
                     }
                     /* Edge case where document exists but entry does not */
                     else {
-                        const data = { uploadCount: this.state.uploadLimit };
+                        data = { ...data, uploadCount: this.state.uploadLimit };
                         await collection.set(data); 
                         this.setState({ uploadCount: this.state.uploadLimit });
                     }   
                 }
                 // If the user does not have data, init to 5 uploads
                 else {
-                    const data = { uploadCount: this.state.uploadLimit };
+                    data = { ...data, uploadCount: this.state.uploadLimit };
                     await collection.set(data);
                     this.setState({ uploadCount: this.state.uploadLimit });
                 }   
@@ -109,8 +111,14 @@ export class UploadView extends React.Component {
     }
 
     putData = async (data) => {
-        const collection = db.collection('userData').doc(this.props.userData.userName);
-        await collection.set(data);
+        try {
+            const collection = db.collection('userData').doc(this.props.userData.userName);
+            const docData = (await collection.get()).data();
+            const newData = { ...docData, ...data };
+            await collection.set(newData);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     onUploadChange = (info) => {
