@@ -62,22 +62,21 @@ export class VoteView extends React.Component {
         try {
             const collection = db.collection('userData').doc(`${this.props.userData.userName}`);
             const doc = await collection.get();
-            if (doc) {
-                const data = doc.data();
-                if (!data.hasVoted) {
-                    collection.set({
-                        ...data,
-                        hasVoted: true
-                    });
-                }
-                /* The below block should never be used */
-                // else {
-                //     collection.set({
-                //         ...data,
-                //         hasVoted: false
-                //     });
-                // }
+            const data = doc.data();
+
+            if (!data || !data.hasVoted) {
+                collection.set({
+                    ...data,
+                    hasVoted: true
+                });
             }
+            /* The below block should never be used */
+            // else {
+            //     collection.set({
+            //         ...data,
+            //         hasVoted: false
+            //     });
+            // }
         } catch (error) {
             console.log(error);
         }
