@@ -157,11 +157,12 @@ export class MainContainer extends React.Component {
                             <Menu.Item key="2">
                                 <Link to='/upload'>Competition Uploader</Link>
                             </Menu.Item>
-                            <Menu.Item key="3" disabled>
+                            <Menu.Item key="3">
                                 <Link to='/vote'>Voting</Link>
                             </Menu.Item>
-                            <Menu.Item key="4" icon={<LinkOutlined />} disabled>
-                                <a href={this.state.bracketUrl || '#'} target='#'>Bracket</a>
+                            <Menu.Item key="4">
+                                {/* <a href={this.state.bracketUrl || '#'} target='#'>Bracket</a> */}
+                                <Link to='/bracket'>Bracket</Link>
                             </Menu.Item>
                         </Menu>
                     </Header>

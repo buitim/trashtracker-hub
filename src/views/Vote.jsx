@@ -130,9 +130,10 @@ export class VoteView extends React.Component {
 
             /* Note: This is nastyyyyyyy */
             const photoUrls =  await Promise.all(votingPictures.items.map(async (val) => {
+                const width = Math.random() % 5 + 2, height = Math.random() % 3 + 1;
                 const photoPath = val.location.path_;
                 const photoUrl = await fbStorage.child(photoPath).getDownloadURL();
-                return { src: photoUrl, width: 1, height: 1};
+                return { src: photoUrl, width: width, height: height};
             }));
 
             /* Set State for Carousel */

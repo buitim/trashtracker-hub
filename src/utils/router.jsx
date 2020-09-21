@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import HomeView from '../views/Home';
 import UploadView from '../views/Uploader';
 import VoteView from '../views/Vote';
+import BracketView from '../views/Bracket';
 
 export class AppRouter extends React.Component {
     render(){
@@ -13,6 +14,9 @@ export class AppRouter extends React.Component {
                 </Route>
                 <Route path='/vote'>
                     <VoteView onRouteChange={this.props.onRouteChange} userData={this.props.userData}/>
+                </Route>
+                <Route path='/bracket'>
+                    <BracketView onRouteChange={this.props.onRouteChange} userData={this.props.userData}/>
                 </Route>
                 <Route path='/'>
                     <HomeView onRouteChange={this.props.onRouteChange}/>
